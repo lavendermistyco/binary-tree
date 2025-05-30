@@ -75,10 +75,12 @@ public class TreeTraversalDemo {
         }
         return allPaths;
     }
+
+    // Pre-order? It means we process the node first. In this case processing the node means adding it to the current path
     private static void dfsBacktrack(Node node, List<String> currentPath, List<String> allPaths) {
-        currentPath.add(node.val);
-        if (node.left == null && node.right == null) {
-            allPaths.add(String.join("->", currentPath));
+        currentPath.add(node.val); // Node
+        if (node.left == null && node.right == null) { // Our stopping case for reaching a leaf
+            allPaths.add(String.join("->", currentPath)); //We finish with one path, process the output
         } else {
             if (node.left  != null) {
                 dfsBacktrack(node.left,  currentPath, allPaths);
