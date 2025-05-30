@@ -69,35 +69,55 @@ public class TreeTraversalDemo {
 
     // --- 4. Solution 1: Backtracking with List<String> ---
     static List<String> binaryTreePaths_Backtrack(Node root) {
-        List<String> results = new ArrayList<>();
-        if (root != null) dfsBacktrack(root, new ArrayList<>(), results);
-        return results;
-    }
-    private static void dfsBacktrack(Node node, List<String> path, List<String> results) {
-        path.add(node.val);
-        if (node.left == null && node.right == null) {
-            results.add(String.join("->", path));
-        } else {
-            if (node.left  != null) dfsBacktrack(node.left,  path, results);
-            if (node.right != null) dfsBacktrack(node.right, path, results);
+        List<String> allPaths = new ArrayList<>();
+        if (root != null) {
+            dfsBacktrack(root, new ArrayList<>(), allPaths);
         }
-        path.removeLast();
+        return allPaths;
+    }
+    private static void dfsBacktrack(Node node, List<String> currentPath, List<String> allPaths) {
+        currentPath.add(node.val);
+        if (node.left == null && node.right == null) {
+            allPaths.add(String.join("->", currentPath));
+        } else {
+            if (node.left  != null) {
+                dfsBacktrack(node.left,  currentPath, allPaths);
+            }
+
+            if (node.right != null) {
+                dfsBacktrack(node.right, currentPath, allPaths);
+            }
+        }
+        currentPath.remove(currentPath.size() - 1);
     }
 
     // --- 5. Solution 2: Build strings on-the-fly ---
     static List<String> binaryTreePaths_StringBuild(Node root) {
-        List<String> results = new ArrayList<>();
-        if (root != null) dfsBuild(root, "", results);
-        return results;
+        List<String> allPaths = new ArrayList<>();
+        if (root != null) {
+            dfsBuild(root, "", allPaths);
+        }
+        return allPaths;
     }
-    private static void dfsBuild(Node node, String current, List<String> results) {
-        current = current.isEmpty() ? node.val : current + "->" + node.val;
+
+    private static void dfsBuild(Node node, String currentPath, List<String> allPaths) {
+        if (currentPath.isEmpty()) {
+            currentPath = node.val;
+        } else {
+            currentPath += "->" + node.val;
+        }
+
         if (node.left == null && node.right == null) {
-            results.add(current);
+            allPaths.add(currentPath);
             return;
         }
-        if (node.left  != null) dfsBuild(node.left,  current, results);
-        if (node.right != null) dfsBuild(node.right, current, results);
+
+        if (node.left != null) {
+            dfsBuild(node.left, currentPath, allPaths);
+        }
+        if (node.right != null) {
+            dfsBuild(node.right, currentPath, allPaths);
+        }
     }
 
 
